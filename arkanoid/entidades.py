@@ -67,7 +67,7 @@ class Raqueta(Sprite):
 
         
 class Ladrillo(Sprite):
-    def __init__(self, fila, columna):
+    def __init__(self, fila, columna, puntos):
         super().__init__()
 
         ladrillo_verde = os.path.join("resources", "images", "greenTile.png")
@@ -75,7 +75,7 @@ class Ladrillo(Sprite):
         ancho = self.image.get_width()
         alto = self.image.get_height()
         self.rect = self.image.get_rect(x=columna * ancho, y=fila * alto)
-        self.valor_puntos = fila  #al crear el ladrillo tenga un valor para la puntuacion
+        self.valor_puntos = puntos  #al crear el ladrillo tenga un valor para la puntuacion
         puntos_acumulada = 0
 
     
@@ -92,6 +92,7 @@ class Pelota(Sprite):
     margen_raqueta_pelota = 5
     velocidad_x = 5
     velocidad_y = 5
+    juego_iniciado = False    
     def __init__(self, **kwargs):
         super().__init__()
          
@@ -99,8 +100,8 @@ class Pelota(Sprite):
         pelota = os.path.join("resources", "images", "ball1.png")
         self.image = pg.image.load(pelota)
         self.rect = self.image.get_rect(**kwargs) 
-    def update(self, raqueta, juego_iniciado):
-        if not juego_iniciado:
+    def update(self, raqueta):
+        if not self.juego_iniciado:
             self.rect = self.image.get_rect(midbottom= raqueta.rect.midtop)
         else:
             self.rect.x += self.velocidad_x
@@ -114,19 +115,26 @@ class Pelota(Sprite):
 
             if self.rect.top > ALTO:
                 self.pierdes()
-                self.reset()
+                self.juego_iniciado = False
 
                 
     
     def pierdes(self):
         
-        self.VIDAS = self.VIDAS -1
+        self.VIDAS = self.VIDAS - 1
+        print("pierdes una vida{self.VIDAS}")
+        if self.VIDAS < 1:
+            self.sigo_jugando = False
+
+     """ 
+        VIDAS = VIDAS -1
         print("1 vida menos")
         if VIDAS == 0:
             print("GAME OVER")
             self.salir = True
 
         print("pierdes una vida")
+        """
     
     def reset():
         print("recolocamos la pelota sobre inicial")

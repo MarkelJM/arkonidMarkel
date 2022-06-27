@@ -66,13 +66,16 @@ class Partida(Escena):
         self.jugador = Raqueta()
         self.crear_muro()
         self.pelotita = Pelota(midbottom= self.jugador.rect.midtop)
+        #VIDAS
         self.vida_pelota = Pelota()
         self.contador_vidas = 0
-        self.imagen_vidas()
+        #self.imagen_vidas()
+        #PUNTOS
+        self.sumar_puntos
+        self.sumatorio_puntos = 0
 
     def bucle_principal(self):
         salir = False 
-        partida_iniciada = False       
         while not salir:
             self.relog.tick(FPS)
             self.jugador.update()
@@ -81,26 +84,25 @@ class Partida(Escena):
                 if event.type == pg.QUIT:
                     salir = True
                 if event.type == pg.KEYDOWN and  event.key == pg.K_SPACE:
-                    partida_iniciada = True
+                    self.pelotita.juego_iniciado = True
             self.pantalla.fill((0, 99, 0))
             self.pintar_fondo()
 
             self.jugador.update()
-            self.pelotita.update(self.jugador, partida_iniciada) 
+            self.pelotita.update(self.jugador) 
             self.pelotita.hay_colision(self.jugador)
-            golpeados = pg.sprite.spritecollide(self.pelotita, self.ladrillos, True)
+            self.golpeados = pg.sprite.spritecollide(self.pelotita, self.ladrillos, True)
+            
+            #self.puntuacion = self.sumar_puntos()
+            #self.sumatorio_puntos = self.sumatorio_puntos + int(self.puntuacion)
+
 
             #imagen vidas
             
 
-            puntos_totales = 0
-                  
-            if len(golpeados) > 0:
-                self.pelotita.velocidad_y *= -1
+            
                 
-                for self.ladrillo in golpeados:
-                    puntos_totales += self.ladrillo.valor_puntos  + 1 #ya que las filas empiezan desde 0
-                    print(puntos_totales)
+                
             
                      
                     #para los ladrillos golpeados, sumar puntuacion        
@@ -131,14 +133,26 @@ class Partida(Escena):
         
 
         for fila in range(num_filas):
+            puntos = 10 +fila*10
             for columna in range(num_columnas):
-                ladrillo = Ladrillo (fila , columna) #el ultimo 'fila' es la para la puntuacion
+                ladrillo = Ladrillo (fila , columna, puntos) #el ultimo 'fila' es la para la puntuacion
                 
                 margen_x = (ANCHO - ladrillo.image.get_width()* num_columnas)//2 
                 ladrillo.rect.x += margen_x 
                 ladrillo.rect.y += margen_y             
                 self.ladrillos.add(ladrillo)
+    
+    def sumar_puntos(self):
+        puntos_totales = 0
+                  
+        if len(self.golpeados) > 0:
+            self.pelotita.velocidad_y *= -1
+            for self.ladrillo in self.golpeados:
+                puntos_totales += (self.ladrillo.valor_puntos ) #ya que las filas empiezan desde 0
+                puntos_totales = int(puntos_totales) #me daba error ''int' and 'NoneType'' y no sirve de nada
+                return puntos_totales
 
+"""
     def imagen_vidas(self):
         #creamos como vidas imagenes
         #me da error en escenas por: 'list' object is not callable--> modifico sin crear lista
@@ -150,9 +164,10 @@ class Partida(Escena):
                 pelota.rect.x +=   pelota.image.get_width()+ 10
                 pelota.rect.y = 5             
                 self.vida_pelota.add(pelota)
+                """
         
 
-        """
+"""
         for i in range (VIDAS):
             self.imagen_vidas.append(
                 pg.image.load(
