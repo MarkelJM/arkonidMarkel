@@ -70,7 +70,13 @@ class Partida(Escena):
         self.contador_vidas = 0
         # self.imagen_vidas()
         # PUNTOS
+        self.golpeados = []
         self.sumar_puntos()
+        # el método sumar puntos utiliza la lista de golpeados, pero golpeados
+        # no tiene valor hasta que pasa por el bucle principal, así que cuando
+        # lo llamas en el constructor, va a dar un error de que golpeados no
+        # existe. Esto se puede arreglar inicializando golpeados con una lista
+        # vacía antes de llamar al método
         self.sumatorio_puntos = 0
 
     def bucle_principal(self):
