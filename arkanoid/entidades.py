@@ -70,7 +70,7 @@ class Ladrillo(Sprite):
         alto = self.image.get_height()
         self.rect = self.image.get_rect(x=columna * ancho, y=fila * alto)
         self.valor_puntos = puntos  # al crear el ladrillo tenga un valor para la puntuacion
-        puntos_acumulada = 0
+        # he eliminado la variable puntos_acumulada que no se usaba para nada
 
 
 class Pelota(Sprite):

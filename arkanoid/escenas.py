@@ -99,8 +99,10 @@ class Partida(Escena):
             self.golpeados = pg.sprite.spritecollide(
                 self.pelotita, self.ladrillos, True)
 
-            #self.puntuacion = self.sumar_puntos()
-            #self.sumatorio_puntos = self.sumatorio_puntos + int(self.puntuacion)
+            # la pelota había dejado de rebotar porque el rebote lo estás
+            # aplicando en el método sumar_puntos lo que, en realidad, no tiene
+            # demasiado sentido... al menos con ese nombre de método
+            self.sumatorio_puntos = self.sumatorio_puntos + self.sumar_puntos()
 
             # imagen vidas
 
@@ -147,12 +149,19 @@ class Partida(Escena):
 
         if len(self.golpeados) > 0:
             self.pelotita.velocidad_y *= -1
-            for self.ladrillo in self.golpeados:
+            # ladrillo es una variable local, no un atributo de la clase
+            # self aquí no tiene sentido. ladrillo solamente es la variable
+            # que usamos para iterar en el bucle
+            for ladrillo in self.golpeados:
                 # ya que las filas empiezan desde 0
-                puntos_totales += (self.ladrillo.valor_puntos)
-                # me daba error ''int' and 'NoneType'' y no sirve de nada
-                puntos_totales = int(puntos_totales)
-                return puntos_totales
+                puntos_totales += ladrillo.valor_puntos
+        # el "return" lo tienes que hacer fuera del bucle for
+        # si lo haces en el for, solamente contarás los puntos del
+        # primer ladrillo.
+        # Por otro lado, también tiene que estar fuera del if, ya que si la
+        # condición no se cumple, no devuelve nada (por eso el error del NoneType)
+        # Basta con cambiar la indentación
+        return puntos_totales
 
     """
     def imagen_vidas(self):
