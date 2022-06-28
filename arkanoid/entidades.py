@@ -114,7 +114,7 @@ class Pelota(Sprite):
         # constante
         self.vidas = self.vidas - 1
         # agrego f a la cadena para que aplique el formato
-        print(f"Pierdes una vida {self.VIDAS}")
+        print(f"Pierdes una vida {self.vidas}")
         if self.vidas < 1:
             self.sigo_jugando = False
 
