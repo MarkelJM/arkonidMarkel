@@ -87,6 +87,9 @@ class Pelota(Sprite):
         pelota = os.path.join("resources", "images", "ball1.png")
         self.image = pg.image.load(pelota)
         self.rect = self.image.get_rect(**kwargs)
+        # al inicializar la clase, establecemos vidas como el número total
+        # de vidas que están especificadas en la configuración
+        self.vidas = VIDAS
 
     def update(self, raqueta):
         if not self.juego_iniciado:
@@ -105,10 +108,14 @@ class Pelota(Sprite):
                 self.juego_iniciado = False
 
     def pierdes(self):
-
-        self.VIDAS = self.VIDAS - 1
-        print("pierdes una vida{self.VIDAS}")
-        if self.VIDAS < 1:
+        # Es imposible quitar una vida porque VIDAS no tiene
+        # ningún valor. Voy a inicializarlo en el constructor
+        # Además, voy a cambiarlo a minúsculas porque no es una
+        # constante
+        self.vidas = self.vidas - 1
+        # agrego f a la cadena para que aplique el formato
+        print(f"Pierdes una vida {self.VIDAS}")
+        if self.vidas < 1:
             self.sigo_jugando = False
 
         """
